@@ -145,3 +145,4 @@ cython_debug/
 .secrets.*
 settings.local.toml
 venv
+elasticsearch-data

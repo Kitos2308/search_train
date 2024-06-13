@@ -1,40 +1,44 @@
-version: "3.9"
-
+version: '3'
 services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    # 8.x
+    environment: ['CLI_JAVA_OPTS=-Xms2g -Xmx2g','bootstrap.memory_lock=true','discovery.type=single-node','xpack.security.enabled=false', 'xpack.security.enrollment.enabled=false']
+    ports:
+      - 9200:9200
+#    networks:
+#      - elastic
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#      nofile:
+#        soft: 65536
+#        hard: 65536
+#    deploy:
+#      resources:
+#          limits:
+#            cpus: '2.0'
+#          reservations:
+#            cpus: '1.0'
 
   kibana:
+    image: docker.elastic.co/kibana/kibana:8.7.1
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.4.0
-    restart: always
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200    # address of elasticsearch docker container which kibana will connect
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: d1a66dfd-c4d3-4a0a-8290-2abcb83ab3aa
     ports:
       - 5601:5601
-    depends_on:
-      - elasticsearch
+#    networks:
+#      - elastic
+#    deploy:
+#      resources:
+#          limits:
+#            cpus: '2.0'
+#          reservations:
+#            cpus: '1.0'
 
-  elasticsearch:
-    image: elasticsearch:8.7.1
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xms256m -Xmx256m
-      - ES_HEAP_SIZE=256m
-      - path.data=/opt/elasticsearch/volatile/data
-      - path.logs=/opt/elasticsearch/volatile/logs
-    tmpfs:
-      - /opt/elasticsearch/volatile/data:uid=1000,gid=0
-      - /opt/elasticsearch/volatile/logs:uid=1000,gid=0
-      - /tmp:rw
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    logging:
-        driver: none
 
   postgres:
     image: postgres
@@ -48,3 +52,8 @@ services:
       - POSTGRES_PASSWORD=123456
       - POSTGRES_USER=postgres
       - POSTGRES_DB=search
+
+#networks:
+#  elastic:
+
+
