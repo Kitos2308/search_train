@@ -1,6 +1,18 @@
 version: "3.9"
 
 services:
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200    # address of elasticsearch docker container which kibana will connect
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
   elasticsearch:
     image: elasticsearch:8.7.1
     environment:
