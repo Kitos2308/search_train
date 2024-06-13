@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  elasticsearch:
+    image: elasticsearch:8.7.1
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - ES_HEAP_SIZE=256m
+      - path.data=/opt/elasticsearch/volatile/data
+      - path.logs=/opt/elasticsearch/volatile/logs
+    tmpfs:
+      - /opt/elasticsearch/volatile/data:uid=1000,gid=0
+      - /opt/elasticsearch/volatile/logs:uid=1000,gid=0
+      - /tmp:rw
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    logging:
+        driver: none
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    restart: unless-stopped
+    ports:
+      - "5111:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=search
