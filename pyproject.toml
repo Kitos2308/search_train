@@ -26,6 +26,8 @@ more-itertools = "*"
 pyinstrument = "*"
 typer = "*"
 elasticsearch-dsl = "*"
+pydantic-settings = "^2.3.3"
+alembic = "^1.13.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

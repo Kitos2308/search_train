@@ -1,0 +1,6 @@
+DB_HOST=localhost
+DB_PORT=5111
+DB_USER=postgres
+DB_PASS=123456
+DB_NAME=search
+DB_SCHEMA=public
