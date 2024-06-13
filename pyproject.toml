@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "search-train"
+version = "0.1.0"
+description = ""
+authors = ["Nikita Dolgov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+elasticsearch = {extras = ["async"], version = "*"}
+dynaconf = "*"
+fastapi = "*"
+uvloop = "*"
+uvicorn = "*"
+click = "*"
+requests = "*"
+types-requests = "*"
+loguru = "*"
+sqlalchemy = "*"
+asyncmy = "*"
+greenlet = "*"
+pytest-mock = "*"
+sentry-sdk = "*"
+starlette-prometheus = "*"
+more-itertools = "*"
+pyinstrument = "*"
+typer = "*"
+elasticsearch-dsl = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+
+[tool.pycln]
+all = true
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+# mypy нам устанавливает pre-commit в своём виртуальном окружении
+# в котором нет всех зависимостей,
+# и куда ставить все нужные библиотеки накладно
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# не трогаем внешний код из TECHN-462
+module = "app.utils.elasticsearch_dsl_async.*"
+follow_imports = "skip"
+ignore_errors = true
+
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
