@@ -3,6 +3,8 @@ from sqlalchemy import engine_from_config, pool, text
 import sqlalchemy
 from alembic import context
 from search.settings import settings
+from search.core.models import Base
+import search.core.models as models
 import sys
 
 # this is the Alembic Config object, which provides

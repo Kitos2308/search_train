@@ -3,6 +3,7 @@ from pydantic_settings import SettingsConfigDict, BaseSettings
 
 
 class Settings(BaseSettings):
+    ENVIRONMENT: str = Field(default=..., min_length=2, max_length=20)
     # PostgreSQL
     DB_PORT: int = Field(default=..., ge=1)
     DB_HOST: str = Field(default=..., min_length=1)
