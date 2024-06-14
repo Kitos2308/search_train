@@ -1,10 +1,8 @@
 import uuid
-from sqlalchemy import String, DateTime, Boolean, Date, INTEGER
-from sqlalchemy.orm import relationship, Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String, DateTime, INTEGER
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
-from sqlalchemy.sql import expression
-from datetime import datetime, date
+from datetime import datetime
 import uuid
 
 from sqlalchemy.orm import DeclarativeBase

@@ -146,3 +146,5 @@ cython_debug/
 settings.local.toml
 venv
 elasticsearch-data
+utils/fill_source_data.py
+source_data.csv
