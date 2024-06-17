@@ -1,6 +1,6 @@
 import typer
 
-app = typer.Typer(name='index')
+app = typer.Typer()
 
 
 @app.command()
