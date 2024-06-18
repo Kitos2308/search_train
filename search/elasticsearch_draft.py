@@ -56,7 +56,7 @@ if __name__=='__main__':
     # loop.run_until_complete(get_active_write_index_name())
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(IndexDocument.initialize('mytestindex', using=_search_connection))
+    loop.run_until_complete(IndexDocument.initialize('second', using=_search_connection))
 
 
 
