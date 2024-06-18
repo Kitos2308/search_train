@@ -4,7 +4,7 @@ app = typer.Typer()
 
 
 @app.command()
-def start(app_name:str):
+def start(ctx: typer.Context,app_name:str, chunk_size:int=1000):
     print(f'start {app_name}')
 
 

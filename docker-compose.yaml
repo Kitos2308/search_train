@@ -23,9 +23,8 @@ services:
     environment:
       - HQ_DEFAULT_URL=http://host.docker.internal:9200
       - HQ_DEBUG=True
-      - HQ_ENABLE_SSL=True
+      - HQ_ENABLE_SSL=False
       - HQ_VERIFY_CERTS=False
-      - HQ_CA_CERTS=/usr/local/share/ca-certificates/MYCA.crt
     ports:
       - "5000:5000"
 
