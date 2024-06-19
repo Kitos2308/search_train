@@ -14,6 +14,9 @@ from loguru import logger
 
 from elasticsearch_dsl import AsyncDocument
 
+SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
+SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"
+ACTIVE_SEARCH_INDEX_ALIAS = "searchable-document-index-alias"
 
 GARBAGE_TOKENS = [
     "с иллюстрациями",
@@ -94,11 +97,13 @@ class IndexDocument(AsyncDocument):
         ),
     )
 
-
+    img = Text()
+    entity_date = Date()
+    type = Keyword()
 
     @classmethod
     async def initialize(
-        cls, target_index: str, using: AsyncElasticsearch = None
+            cls, target_index: str, using: AsyncElasticsearch = None
     ) -> None:
         """
         Create the index and populate the mappings if the index does not exist.
@@ -115,7 +120,7 @@ class IndexDocument(AsyncDocument):
 
     class Index:
         name = (
-            settings.ACTIVE_SEARCH_INDEX_ALIAS
+            ACTIVE_SEARCH_INDEX_ALIAS
         )  # put alias here, so we read only from it
         dynamic = MetaField("strict")
         settings = {

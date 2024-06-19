@@ -1,9 +1,11 @@
 import asyncio
 import logging
-
+from search.database import Database
+from search.settings import settings
 from elasticsearch import AsyncElasticsearch
 from elasticsearch_dsl import AsyncDocument
-
+from search.index_service import IndexingService
+from search.index_repository import IndexingRepository
 from search.index_manager import IndexManager, determine_writing_index_name
 from search.index_mapper import IndexDocument
 
@@ -38,12 +40,16 @@ async def elastic():
     async with determine_writing_index_name(
         index_manager, is_mapping_changed=False
     ) as write_index:
+        index_service = IndexingService(repository=IndexingRepository(using=_search_connection))
         await IndexDocument.initialize(
             target_index=write_index, using=_search_connection
         )
+        await index_service.chunked_add_documents(write_index)
 
 
 if __name__=='__main__':
+    Database.create_engine(settings)
+
     # loop = asyncio.get_event_loop()
     # loop.run_until_complete(get_active_write_index_name())
 
