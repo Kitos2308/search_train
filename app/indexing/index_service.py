@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from search.core.crud.source_data import get_source_data
-from search.core.schemas.source_example_one import SearchableEntity
-from search.index_repository import convert_entities_to_index_documents, IndexingRepository
+from app.core.crud.source_data import get_source_data
+from app.core.schemas.source_example_one import SearchableEntity
+from app.indexing.index_repository import convert_entities_to_index_documents, IndexingRepository
 
 @dataclass
 class IndexingService:

@@ -14,7 +14,7 @@ from loguru import logger
 
 from elasticsearch_dsl import AsyncDocument
 
-from search.numerals import POPULAR_NUMERALS, FROM_0_TO_1000
+from app.numerals import POPULAR_NUMERALS, FROM_0_TO_1000
 
 SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
 SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"

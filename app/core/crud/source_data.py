@@ -1,8 +1,8 @@
 from typing import AsyncIterator
 
-from search.database import Database
+from app.database import Database
 from .sql_source_query import source_first_example
-from search.core.schemas.source_example_one import TextOne, SearchableEntity
+from app.core.schemas.source_example_one import TextOne, SearchableEntity
 
 
 async def get_source_data() -> list[SearchableEntity]:

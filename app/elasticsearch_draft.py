@@ -1,13 +1,11 @@
 import asyncio
-import logging
-from search.database import Database
-from search.settings import settings
+from app.database import Database
+from app.settings import settings
 from elasticsearch import AsyncElasticsearch
-from elasticsearch_dsl import AsyncDocument
-from search.index_service import IndexingService
-from search.index_repository import IndexingRepository
-from search.index_manager import IndexManager, determine_writing_index_name
-from search.index_mapper import IndexDocument
+from app.indexing.index_service import IndexingService
+from app.indexing.index_repository import IndexingRepository
+from app.indexing.index_manager import IndexManager, determine_writing_index_name
+from app.indexing.index_mapper import IndexDocument
 
 _search_connection = AsyncElasticsearch(
             hosts=['http://localhost:9200'],

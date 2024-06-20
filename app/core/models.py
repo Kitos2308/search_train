@@ -7,7 +7,7 @@ import uuid
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import MetaData
-from search.settings import settings
+from app.settings import settings
 
 base_metadata = MetaData(
     schema=settings.DB_SCHEMA

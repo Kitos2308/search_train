@@ -2,10 +2,10 @@ import asyncio
 import csv
 from datetime import datetime
 
-from search.settings import settings
-from search.database import Database
+from app.settings import settings
+from app.database import Database
 from sqlalchemy.dialects.postgresql import insert
-from search.core.models import ExampleText
+from app.core.models import ExampleText
 
 
 async def bulk_insert_data(data: list[dict])->None:

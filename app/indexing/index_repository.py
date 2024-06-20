@@ -1,8 +1,8 @@
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_bulk
 
-from search.core.schemas.source_example_one import SearchableEntity, TextOne
-from search.index_mapper import IndexDocument
+from app.core.schemas.source_example_one import SearchableEntity, TextOne
+from app.indexing.index_mapper import IndexDocument
 
 
 class IndexingRepository:
