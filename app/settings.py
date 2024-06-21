@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     # Название базы данных для запуска локальных тестов (pytest). Если задано, то DB_SCHEMA будет заменено на это значение в conftest.py
     TEST_DB_SCHEMA: str = Field(default='')
 
+    SENTRY_DSN: str = Field(default='')
+    DEBUG: bool = Field(default=True)
+
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding='utf-8', extra='ignore')
 
 
