@@ -43,6 +43,7 @@ async def elastic():
             target_index=write_index, using=_search_connection
         )
         await index_service.chunked_add_documents(write_index)
+        await _search_connection.indices.refresh(index=SEARCH_INDEX_NAME_ALPHA)
 
 
 if __name__=='__main__':
