@@ -19,3 +19,6 @@ migrate.down:
 
 migrate.autopep:
 	autopep8 --in-place alembic/versions/*.py
+
+fill:
+	poetry run python fill_source_data.py

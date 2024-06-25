@@ -1,7 +1,7 @@
 import asyncio
 import csv
+import sys
 from datetime import datetime
-
 from app.settings import settings
 from app.database import Database
 from sqlalchemy.dialects.postgresql import insert
@@ -16,9 +16,8 @@ async def bulk_insert_data(data: list[dict])->None:
         await session.commit()
 
 
-
 def mapper_data():
-    with open('./source_data.csv', newline='') as csvfile:
+    with open('utils/source_data.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile)
         return [{
                     'entity_id': int(row[1]),

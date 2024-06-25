@@ -99,7 +99,7 @@ class IndexDocument(AsyncDocument):
         ),
     )
 
-    img = Text()
+    img = Keyword()
     entity_date = Date()
     type = Keyword()
 
