@@ -1,3 +1,5 @@
+import logging
+
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_bulk
 
@@ -14,8 +16,11 @@ class IndexingRepository:
     async def add_documents(
             self, documents: list[IndexDocument], write_index: str
     ) -> None:
-        document_payload = self._prepare_document_payload(documents, write_index)
-        await async_bulk(self.elasticsearch_connection, document_payload, max_retries=5)
+        try:
+            document_payload = self._prepare_document_payload(documents, write_index)
+            await async_bulk(self.elasticsearch_connection, document_payload, max_retries=5)
+        except Exception as ex:
+            logging.error(ex)
 
     @classmethod
     def _prepare_document_payload(

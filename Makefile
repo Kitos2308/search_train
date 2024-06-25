@@ -22,3 +22,6 @@ migrate.autopep:
 
 fill:
 	poetry run python fill_source_data.py
+
+indexing:
+	poetry run python -m app.elasticsearch_draft
