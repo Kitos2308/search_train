@@ -7,7 +7,7 @@ from app.settings import settings
 from fastapi import FastAPI
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette_prometheus import PrometheusMiddleware, metrics
-from searching.views import router as searching_router
+from .searching.views import router as searching_router
 from app.main_app import Application
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -46,10 +46,6 @@ def get_app() -> FastAPI:
     return FastAPIApplication().setup()
 
 
-if __name__ == "__main__":
-    app = get_app()
+app = get_app()
 
-    host = '127.0.0.1'
-    port = 8000
 
-    uvicorn.run(app, host=host, port=port)

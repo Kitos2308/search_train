@@ -25,3 +25,8 @@ fill:
 
 indexing:
 	poetry run python -m app.elasticsearch_draft
+
+
+run.local:
+	uvicorn app.api.fastapi_app:app --reload --env-file="./.env" --host 127.0.0.1
+

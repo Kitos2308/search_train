@@ -11,10 +11,10 @@ from elasticsearch_dsl.query import (
     Match
 )
 
-
 SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
 SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"
 ACTIVE_SEARCH_INDEX_ALIAS = "searchable-document-index-alias"
+
 
 class SearchingRepository:
     elasticsearch_connection: AsyncElasticsearch
@@ -29,14 +29,13 @@ class SearchingRepository:
     ) -> Any:
         search = construct_search(query, self.elasticsearch_connection, SEARCH_INDEX_NAME_ALPHA)
         search_response = await search.execute()
-        f= search_response
-
+        return search_response
 
 
 def construct_search(
         query: str,
         using: AsyncElasticsearch,
-        index:str,
+        index: str,
         is_sort_by_date: bool = False
 ) -> AsyncSearch:
     return (AsyncSearch(
@@ -80,7 +79,7 @@ def construct_search(
 
             },
         },
-    ).highlight('primary_field', fragment_size=100,pre_tags=["<bold>"], post_tags=["</bold>"], phrase_limit=1))
+    ).highlight('primary_field', fragment_size=100, pre_tags=["<bold>"], post_tags=["</bold>"], phrase_limit=1))
 
 
 def get_wide_relevancy(query_string: str):
@@ -113,5 +112,3 @@ def get_wide_relevancy(query_string: str):
         ],
         # filter=minimal_criteria,
     )
-
-
