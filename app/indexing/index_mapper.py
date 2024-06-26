@@ -58,7 +58,7 @@ class IndexDocument(AsyncDocument):
             },
             "trigram": {"type": "text", "analyzer": "trigram"},
             "reverse": {"type": "text", "analyzer": "reverse"},
-            "keyword": {"type": "text", "analyzer": "keyword"},
+            # "keyword": {"type": "text", "analyzer": "keyword"},
             "autocomplete": {"type": "text", "analyzer": "autocomplete_analyzer"},
         },
         copy_to="common_field",

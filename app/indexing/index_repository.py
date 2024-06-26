@@ -1,4 +1,5 @@
 import logging
+from typing import AsyncIterable, AsyncIterator, Any
 
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_bulk
@@ -20,7 +21,11 @@ class IndexingRepository:
             document_payload = self._prepare_document_payload(documents, write_index)
             await async_bulk(self.elasticsearch_connection, document_payload, max_retries=5)
         except Exception as ex:
-            logging.error(ex)
+            logging.error('#######################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+            logging.error(ex.errors[0]['index']['error'])
+            f =len(bytes(ex.errors[0]['index']['data']['primary_field'],'utf-8'))
+            logging.error(f)
+
 
     @classmethod
     def _prepare_document_payload(
