@@ -3,6 +3,8 @@ import asyncio
 import sentry_sdk
 import uvicorn
 import uvloop
+from starlette.staticfiles import StaticFiles
+
 from app.settings import settings
 from fastapi import FastAPI
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
@@ -24,6 +26,11 @@ class FastAPIApplication:
 
         self.app.add_route("/metrics", metrics)
         self.app.include_router(searching_router, prefix="/api/search", tags=["search"])
+        self.app.mount(
+            "/static",
+            StaticFiles(directory='utils/templates/css'),
+            name="static",
+        )
 
         self.add_middlewares()
 
