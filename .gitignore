@@ -148,3 +148,4 @@ venv
 elasticsearch-data
 parser_ayncsearch.py
 draft.py
+start_debug.py

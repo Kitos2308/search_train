@@ -9,22 +9,58 @@
 <body>
 
 
-    <div class="main-search-input-wrap">
+<div class="main-search-input-wrap">
 
 
-        <div class="main-search-input fl-wrap">
-            <div class="main-search-input-item">
-                <form method="post">
+    <div class="main-search-input fl-wrap">
+        <div class="main-search-input-item">
+            <form method="post">
                 <input type="text" name="value" id="value" placeholder="Search Article...">
-                </form>
-            </div>
-
-            <button class="main-search-button">Search</button>
+            </form>
         </div>
 
+        <button class="main-search-button">Search</button>
+    </div>
+
+
+</div>
+    <div>
 
     </div>
 
+
+    {% if articles %}
+    <div class="container text-left">
+        <div class="row">
+            <div class="col">
+                {% for item in articles %}
+                <div class="card mb-1" style="max-width: 960px;">
+                    <div class="row g-0">
+                        {% if item.img %}
+                        <div class="col-md-4">
+                            <img src="https://img.ntv.ru{{ item.img }}" class="img-fluid rounded-start"
+                                 alt="...">
+                        </div>
+                        {% endif %}
+
+                        <div class="{% if item.image_small or item.image_main_video or item.image_big %}col-md-8{% else %} col-md-12 {% endif %}">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <small class="text-body-secondary">
+                                        {{ item.entity_date }}
+                                    </small>
+                                </p>
+                                <h5 class="card-title"><a href="">{{ item.title }}</a></h5>
+                                <p class="card-text">{{ item.primary_field }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
 </body>
 </html>

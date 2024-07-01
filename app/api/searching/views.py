@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory='utils/templates', auto_reload=True)
 
 @router.get("", tags=["Test Stand"])
 async def search_index(request: Request) -> _TemplateResponse:
-    return templates.TemplateResponse("searching.html", {"request": request})
+    return templates.TemplateResponse("searching.html", {"request": request, 'articles': []})
 
 
 @router.post('')
@@ -24,5 +24,5 @@ async def authorize_with_yandex_redirect(
         value: str = Form()):
 
     print(value)
-    result = await searching_service.get_most_relevant_result('query')
-    return result
+    result = await searching_service.get_most_relevant_result(value)
+    return templates.TemplateResponse("searching.html", {"request": request, 'articles': result.hits})
