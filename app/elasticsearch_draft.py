@@ -58,6 +58,6 @@ if __name__ == '__main__':
 
 
 
-    # loop.run_until_complete(elastic_indexing())
+    loop.run_until_complete(elastic_indexing())
 
-    loop.run_until_complete(elastic_searching('Скоро откроется дачный сезон'))
+    # loop.run_until_complete(elastic_searching('Скоро откроется дачный сезон'))
