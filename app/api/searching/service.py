@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.searching.repository import SearchingRepository
+from app.core.searching.repository import SearchingRepository
 
 
 @dataclass

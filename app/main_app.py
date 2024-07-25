@@ -1,11 +1,11 @@
 from dynaconf import settings
 from elasticsearch import AsyncElasticsearch
 
-from .indexing.index_manager import (
+from app.core.indexing.index_manager import (
     IndexManager,
     determine_writing_index_name,
 )
-from .indexing.index_mapper import IndexDocument
+from app.core.indexing.index_mapper import IndexDocument
 
 
 class Application:

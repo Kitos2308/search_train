@@ -1,8 +1,4 @@
-from datetime import datetime, timezone
-
-from typing import AsyncIterator
-
-from app.database import Database
+from app.infrastracture.database import Database
 from .sql_source_query import source_first_example
 from app.core.schemas.source_example_one import TextOne, SearchableEntity
 

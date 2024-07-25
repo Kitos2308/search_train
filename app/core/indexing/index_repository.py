@@ -1,11 +1,10 @@
 import logging
-from typing import AsyncIterable, AsyncIterator, Any
 
 from elasticsearch import AsyncElasticsearch
 from elasticsearch.helpers import async_bulk
 
 from app.core.schemas.source_example_one import SearchableEntity, TextOne
-from app.indexing.index_mapper import IndexDocument
+from app.core.indexing.index_mapper import IndexDocument
 
 
 class IndexingRepository:

@@ -1,9 +1,8 @@
 import asyncio
 import csv
-import sys
 from datetime import datetime
 from app.settings import settings
-from app.database import Database
+from app.infrastracture.database import Database
 from sqlalchemy.dialects.postgresql import insert
 from app.core.models import ExampleText
 

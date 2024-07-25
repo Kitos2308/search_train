@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engin
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .settings import Settings
+    from app.settings import Settings
 
 
 class Database:

@@ -1,12 +1,12 @@
 import asyncio
-from app.database import Database
-from app.searching.repository import SearchingRepository
+from app.core.indexing.index_repository import IndexingRepository
+from app.infrastracture.database import Database
+from app.core.searching.repository import SearchingRepository
 from app.settings import settings
 from elasticsearch import AsyncElasticsearch
-from app.indexing.index_service import IndexingService
-from app.indexing.index_repository import IndexingRepository
-from app.indexing.index_manager import IndexManager, determine_writing_index_name
-from app.indexing.index_mapper import IndexDocument
+from app.core.indexing.index_service import IndexingService
+from app.core.indexing.index_manager import IndexManager, determine_writing_index_name
+from app.core.indexing.index_mapper import IndexDocument
 
 _search_connection = AsyncElasticsearch(
     hosts=['http://localhost:9200'],
