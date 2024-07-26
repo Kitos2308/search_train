@@ -1,11 +1,8 @@
-from dynaconf import settings
+from app.settings import settings
 from elasticsearch import AsyncElasticsearch
 from elasticsearch_dsl import (
     Date,
-    Float,
-    Integer,
     Keyword,
-    Long,
     MetaField,
     Text,
     analyzer,
@@ -14,23 +11,7 @@ from loguru import logger
 
 from elasticsearch_dsl import AsyncDocument
 
-from app.numerals import POPULAR_NUMERALS, FROM_0_TO_1000
-
-SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
-SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"
-ACTIVE_SEARCH_INDEX_ALIAS = "searchable-document-index-alias"
-
-GARBAGE_TOKENS = [
-    "с иллюстрациями",
-    "скачать бесплатно",
-    "электронная книга",
-    "читать бесплатно",
-    "читать онлайн",
-    "epub",
-    "епаб",
-    "купить",
-    "автор",
-]
+from app.numerals import POPULAR_NUMERALS
 
 
 class IndexDocument(AsyncDocument):
@@ -122,7 +103,7 @@ class IndexDocument(AsyncDocument):
 
     class Index:
         name = (
-            ACTIVE_SEARCH_INDEX_ALIAS
+            settings.ACTIVE_SEARCH_INDEX_ALIAS
         )  # put alias here, so we read only from it
         dynamic = MetaField("strict")
         settings = {
@@ -166,13 +147,6 @@ class IndexDocument(AsyncDocument):
                     "char_filter": {
                         # Лучше применять до similar_sounds, который заставит
                         # коверкать слова: например, вместо "электронная" придется написать "електронная".
-                        "garbage_tokens_strip": {
-                            "type": "mapping",
-                            "mappings": [
-                                f"{garbage_token} => "
-                                for garbage_token in GARBAGE_TOKENS
-                            ],
-                        },
                         # При применении, similar_sounds будут влиять на всё: стемминг,
                         # стоп-слова, другие char_filters, следующие после них
                         "similar_sounds": {

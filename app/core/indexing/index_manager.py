@@ -4,11 +4,8 @@ from typing import AsyncIterator
 from dynaconf import settings
 from elasticsearch import AsyncElasticsearch
 from loguru import logger
+from app.settings import settings
 
-
-SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
-SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"
-ACTIVE_SEARCH_INDEX_ALIAS = "searchable-document-index-alias"
 
 class IndexManager:
     def __init__(self, elasticsearch_connection: AsyncElasticsearch):
@@ -20,56 +17,56 @@ class IndexManager:
         if self._active_index_cache:
             return self._active_index_cache
 
-        is_alpha_active = await self._is_index_active(SEARCH_INDEX_NAME_ALPHA)
+        is_alpha_active = await self._is_index_active(settings.SEARCH_INDEX_NAME_ALPHA)
         if is_alpha_active:
-            self._active_index_cache = SEARCH_INDEX_NAME_ALPHA
-            return SEARCH_INDEX_NAME_ALPHA
+            self._active_index_cache = settings.SEARCH_INDEX_NAME_ALPHA
+            return settings.SEARCH_INDEX_NAME_ALPHA
 
-        is_beta_active = await self._is_index_active(SEARCH_INDEX_NAME_BETA)
+        is_beta_active = await self._is_index_active(settings.SEARCH_INDEX_NAME_BETA)
         if is_beta_active:
-            self._active_index_cache = SEARCH_INDEX_NAME_BETA
-            return SEARCH_INDEX_NAME_BETA
+            self._active_index_cache = settings.SEARCH_INDEX_NAME_BETA
+            return settings.SEARCH_INDEX_NAME_BETA
 
         # no active indices, but it's ok, return this one
-        return SEARCH_INDEX_NAME_ALPHA
+        return settings.SEARCH_INDEX_NAME_ALPHA
 
     async def _is_index_active(self, index_name: str) -> bool:
         return await self.elasticsearch_connection.indices.exists_alias(
-            name=ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
+            name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
         )
 
     async def does_active_index_exist(self) -> bool:
         return any(
             await asyncio.gather(
                 *[
-                    self._is_index_active(SEARCH_INDEX_NAME_ALPHA),
-                    self._is_index_active(SEARCH_INDEX_NAME_BETA),
+                    self._is_index_active(settings.SEARCH_INDEX_NAME_ALPHA),
+                    self._is_index_active(settings.SEARCH_INDEX_NAME_BETA),
                 ]
             )
         )
 
     async def activate_index(self, index_name: str) -> None:
         this_index_active = await self.elasticsearch_connection.indices.exists_alias(
-            name=ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
+            name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
         )
         if this_index_active:
             logger.info(
-                f"index {index_name} already tied to alias {ACTIVE_SEARCH_INDEX_ALIAS}, do nothing"
+                f"index {index_name} already tied to alias {settings.ACTIVE_SEARCH_INDEX_ALIAS}, do nothing"
             )
             return None
 
         some_index_active = await self.elasticsearch_connection.indices.exists_alias(
-            name=ACTIVE_SEARCH_INDEX_ALIAS
+            name=settings.ACTIVE_SEARCH_INDEX_ALIAS
         )
         if some_index_active:
             logger.warning(
-                f"alias {ACTIVE_SEARCH_INDEX_ALIAS} tied to a different index, "
+                f"alias {settings.ACTIVE_SEARCH_INDEX_ALIAS} tied to a different index, "
                 f"human intervention required"
             )
             return None
 
         await self.elasticsearch_connection.indices.put_alias(
-            index=index_name, name=ACTIVE_SEARCH_INDEX_ALIAS
+            index=index_name, name=settings.ACTIVE_SEARCH_INDEX_ALIAS
         )
 
     async def get_inactive_write_index_name(self, check_exists: bool = False) -> str:
@@ -77,10 +74,10 @@ class IndexManager:
             return self._inactive_index_cache
 
         active_index_name = await self.get_active_write_index_name()
-        if active_index_name == SEARCH_INDEX_NAME_ALPHA:
-            self._inactive_index_cache = SEARCH_INDEX_NAME_BETA
+        if active_index_name == settings.SEARCH_INDEX_NAME_ALPHA:
+            self._inactive_index_cache = settings.SEARCH_INDEX_NAME_BETA
         else:
-            self._inactive_index_cache = SEARCH_INDEX_NAME_ALPHA
+            self._inactive_index_cache = settings.SEARCH_INDEX_NAME_ALPHA
 
         if self._inactive_index_cache is None:
             raise AssertionError(
@@ -124,13 +121,13 @@ class IndexManager:
                     {
                         "remove": {
                             "index": from_index,
-                            "alias": ACTIVE_SEARCH_INDEX_ALIAS,
+                            "alias": settings.ACTIVE_SEARCH_INDEX_ALIAS,
                         }
                     },
                     {
                         "add": {
                             "index": to_index,
-                            "alias": ACTIVE_SEARCH_INDEX_ALIAS,
+                            "alias": settings.ACTIVE_SEARCH_INDEX_ALIAS,
                         }
                     },
                 ]

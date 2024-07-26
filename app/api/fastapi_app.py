@@ -1,14 +1,11 @@
 import asyncio
-
 import sentry_sdk
-import uvicorn
 import uvloop
 from starlette.staticfiles import StaticFiles
-
 from app.settings import settings
 from fastapi import FastAPI
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
-from starlette_prometheus import PrometheusMiddleware, metrics
+from starlette_prometheus import metrics
 from .searching.views import router as searching_router
 from app.main_app import Application
 

@@ -1,19 +1,16 @@
 from typing import Any
 from elasticsearch import AsyncElasticsearch
 from elasticsearch_dsl import AsyncSearch
+from app.settings import settings
 from elasticsearch_dsl.query import (
     Bool,
     ConstantScore,
     DisMax,
     FunctionScore,
-    Term,
     MatchPhrase,
-    Match
 )
 
-SEARCH_INDEX_NAME_ALPHA = "searchable-document-index-alpha"
-SEARCH_INDEX_NAME_BETA = "searchable-document-index-beta"
-ACTIVE_SEARCH_INDEX_ALIAS = "searchable-document-index-alias"
+
 
 
 class SearchingRepository:
@@ -27,7 +24,7 @@ class SearchingRepository:
             query: str,
 
     ) -> Any:
-        search = construct_search(query, self.elasticsearch_connection, SEARCH_INDEX_NAME_ALPHA)
+        search = construct_search(query, self.elasticsearch_connection, settings.SEARCH_INDEX_NAME_ALPHA)
         search_response = await search.execute()
         return search_response
 
@@ -36,7 +33,6 @@ def construct_search(
         query: str,
         using: AsyncElasticsearch,
         index: str,
-        is_sort_by_date: bool = False
 ) -> AsyncSearch:
     return (AsyncSearch(
         using=using,
@@ -46,16 +42,6 @@ def construct_search(
             query=Bool(
                 should=[
                     get_wide_relevancy(query),
-                    # Bool(
-                    #     should=[
-                    #         Term(
-                    #             type={
-                    #                 "value": 'article',
-                    #                 "boost": 100500,  # does not matter which number, as long as it's high
-                    #             }
-                    #         ),
-                    #     ],
-                    # ),
                 ]
             ),
             field_value_factor={
@@ -93,15 +79,6 @@ def get_wide_relevancy(query_string: str):
             boost=10,
         ),
     ]
-
-    # minimal_criteria = MatchPhrase(
-    #     common_field={
-    #         "query": query_string,
-    #         "minimum_should_match": -1,
-    #         "zero_terms_query": "all",
-    #     },
-    # )
-
     return Bool(
         should=[
             DisMax(
@@ -110,5 +87,4 @@ def get_wide_relevancy(query_string: str):
                 ]
             ),
         ],
-        # filter=minimal_criteria,
     )

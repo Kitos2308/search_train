@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     SENTRY_DSN: str = Field(default='')
     DEBUG: bool = Field(default=True)
 
+    SEARCH_INDEX_NAME_ALPHA: str = Field(default='')
+    SEARCH_INDEX_NAME_BETA: str = Field(default='')
+    ACTIVE_SEARCH_INDEX_ALIAS: str = Field(default='')
+
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding='utf-8', extra='ignore')
 
 
