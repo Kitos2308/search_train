@@ -1,6 +1,3 @@
-import os
-import sys
-
 from fastapi import APIRouter, Depends, Query, Request, Form
 from starlette.templating import Jinja2Templates, _TemplateResponse
 
@@ -18,7 +15,7 @@ async def search_index(request: Request) -> _TemplateResponse:
 
 
 @router.post('')
-async def authorize_with_yandex_redirect(
+async def search_query(
         request: Request,
         searching_service: SearchingService = Depends(get_searching_service),
         value: str = Form()):
