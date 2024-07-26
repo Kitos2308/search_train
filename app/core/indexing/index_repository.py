@@ -16,14 +16,9 @@ class IndexingRepository:
     async def add_documents(
             self, documents: list[IndexDocument], write_index: str
     ) -> None:
-        try:
-            document_payload = self._prepare_document_payload(documents, write_index)
-            await async_bulk(self.elasticsearch_connection, document_payload, max_retries=5)
-        except Exception as ex:
-            logging.error('#######################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-            logging.error(ex.errors[0]['index']['error'])
-            f =len(bytes(ex.errors[0]['index']['data']['primary_field'],'utf-8'))
-            logging.error(f)
+        document_payload = self._prepare_document_payload(documents, write_index)
+        await async_bulk(self.elasticsearch_connection, document_payload, max_retries=5)
+
 
 
     @classmethod
