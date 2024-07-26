@@ -3,6 +3,7 @@ from app.core.indexing.repositories.db.source_data import get_source_data
 from app.core.schemas.source_example_one import SearchableEntity
 from app.core.indexing.index_repository import convert_entities_to_index_documents, IndexingRepository
 
+
 @dataclass
 class IndexingService:
     repository: IndexingRepository
@@ -12,21 +13,6 @@ class IndexingService:
 
     ) -> list[SearchableEntity]:
         return await get_source_data()
-
-    # async def reindex_all_searchable_entities(
-    #         self, chunk_size: int, write_index: str
-    # ) -> None:
-    #     await asyncio.gather(
-    #         *[
-    #             self.chunked_add_documents(
-    #                 entity_type,
-    #                 chunk_size=chunk_size,
-    #                 from_sql=True,
-    #                 write_index=write_index,
-    #             )
-    #             for entity_type in list(SearchableEntityType)
-    #         ]
-    #     )
 
     async def chunked_add_documents(
             self,
