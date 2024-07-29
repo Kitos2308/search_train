@@ -1,5 +1,4 @@
 import asyncio
-import logging
 
 from typer import Typer
 from app.core.indexing.index_repository import IndexingRepository
@@ -9,7 +8,7 @@ from elasticsearch import AsyncElasticsearch
 from app.core.indexing.index_service import IndexingService
 from app.core.indexing.index_manager import IndexManager, determine_writing_index_name
 from app.core.indexing.index_mapper import IndexDocument
-from fill_source_data import mapper_data, bulk_insert_data
+from app.infrastructure.fill_source_data import mapper_data, bulk_insert_data
 
 _search_connection = AsyncElasticsearch(
     hosts=['http://localhost:9200'],

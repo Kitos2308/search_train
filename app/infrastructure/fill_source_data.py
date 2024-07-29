@@ -1,7 +1,5 @@
-import asyncio
 import csv
 from datetime import datetime
-from app.settings import settings
 from app.infrastructure.database import Database
 from sqlalchemy.dialects.postgresql import insert
 from app.core.models import ExampleText
@@ -30,12 +28,5 @@ def mapper_data():
                 }
             for index, row in enumerate(spamreader) if index !=0]
 
-
-
-if __name__=='__main__':
-    Database.create_engine(settings)
-    data = mapper_data()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(bulk_insert_data(data))
 
 
