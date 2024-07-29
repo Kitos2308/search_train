@@ -1,4 +1,4 @@
-from app.infrastracture.database import Database
+from app.infrastructure.database import Database
 from .sql_source_query import source_first_example
 from app.core.schemas.source_example_one import TextOne, SearchableEntity
 

@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     SEARCH_INDEX_NAME_BETA: str = Field(default='')
     ACTIVE_SEARCH_INDEX_ALIAS: str = Field(default='')
 
+    ELASTICSEARCH_HOST: str = Field(default='', min_length=3)
+
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding='utf-8', extra='ignore')
 
 

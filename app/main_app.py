@@ -1,6 +1,5 @@
-from dynaconf import settings
 from elasticsearch import AsyncElasticsearch
-
+from app.settings import settings
 from app.core.indexing.index_manager import (
     IndexManager,
     determine_writing_index_name,
@@ -11,7 +10,7 @@ from app.core.indexing.index_mapper import IndexDocument
 class Application:
     def __init__(self) -> None:
         self._search_connection = AsyncElasticsearch(
-            hosts=['http://localhost:9200'],
+            hosts=[settings.ELASTICSEARCH_HOST],
             maxsize=10,
             retry_on_timeout=True,
         )

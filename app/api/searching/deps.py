@@ -2,7 +2,7 @@ from elasticsearch import AsyncElasticsearch
 from fastapi import Depends
 from starlette.requests import Request
 
-from app.api.searching.service import SearchingService
+from app.core.searching.service import SearchingService
 from app.core.searching.repository import SearchingRepository
 
 

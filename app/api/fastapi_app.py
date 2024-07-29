@@ -34,8 +34,6 @@ class FastAPIApplication:
         return self.app
 
     def add_middlewares(self) -> None:
-        # self.app.add_middleware(PrometheusMiddleware)
-        # self.app.add_middleware(ProfilingMiddleware)
         if settings.SENTRY_DSN:
             sentry_sdk.init(
                 dsn=settings.SENTRY_DSN,
@@ -43,7 +41,7 @@ class FastAPIApplication:
                 debug=settings.DEBUG,
                 default_integrations=True,
             )
-            # self.app.add_middleware(SentryAsgiMiddleware)
+            self.app.add_middleware(SentryAsgiMiddleware)
 
 
 def get_app() -> FastAPI:

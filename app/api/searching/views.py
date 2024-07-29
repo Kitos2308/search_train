@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, Query, Request, Form
+from fastapi import APIRouter, Depends, Request, Form
 from starlette.templating import Jinja2Templates, _TemplateResponse
 
-from app.api.searching.service import SearchingService
+from app.core.searching.service import SearchingService
 from .deps import get_searching_service
 
 router = APIRouter()

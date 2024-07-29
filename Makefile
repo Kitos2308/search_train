@@ -30,3 +30,12 @@ indexing:
 run.local:
 	uvicorn app.api.fastapi_app:app --reload --env-file="./.env" --host 127.0.0.1
 
+cli.fill:
+	 python -m app.cli.typer_app indexing fill-data-postgres
+
+
+cli.reindex:
+	python -m app.cli.typer_app indexing start-full-reindex
+
+cli.help:
+	python -m app.cli.typer_app indexing --help

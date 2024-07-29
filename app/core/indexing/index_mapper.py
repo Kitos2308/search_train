@@ -13,6 +13,11 @@ from elasticsearch_dsl import AsyncDocument
 
 from app.numerals import POPULAR_NUMERALS
 
+GARBAGE_TOKENS = [
+    "с иллюстрациями",
+    "скачать бесплатно",
+]
+
 
 class IndexDocument(AsyncDocument):
     primary_field = Text(
@@ -147,6 +152,13 @@ class IndexDocument(AsyncDocument):
                     "char_filter": {
                         # Лучше применять до similar_sounds, который заставит
                         # коверкать слова: например, вместо "электронная" придется написать "електронная".
+                        "garbage_tokens_strip": {
+                            "type": "mapping",
+                            "mappings": [
+                                f"{garbage_token} => "
+                                for garbage_token in GARBAGE_TOKENS
+                            ],
+                        },
                         # При применении, similar_sounds будут влиять на всё: стемминг,
                         # стоп-слова, другие char_filters, следующие после них
                         "similar_sounds": {

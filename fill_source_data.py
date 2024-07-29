@@ -2,7 +2,7 @@ import asyncio
 import csv
 from datetime import datetime
 from app.settings import settings
-from app.infrastracture.database import Database
+from app.infrastructure.database import Database
 from sqlalchemy.dialects.postgresql import insert
 from app.core.models import ExampleText
 
