@@ -1,5 +1,4 @@
 import asyncio
-
 from typer import Typer
 from app.core.indexing.index_repository import IndexingRepository
 from app.infrastructure.database import Database
@@ -32,7 +31,6 @@ async def get_active_write_index_name() -> str:
         return settings.SEARCH_INDEX_NAME_ALPHA
 
 
-
 async def _start_full_reindex():
     index_manager = IndexManager(elasticsearch_connection=_search_connection)
     async with determine_writing_index_name(
@@ -50,9 +48,9 @@ async def _start_full_reindex():
 def start_full_reindex():
     asyncio.run(_start_full_reindex())
 
+
 @app.command()
 def fill_data_postgres():
     Database.create_engine(settings)
     data = mapper_data()
     asyncio.run(bulk_insert_data(data))
-    print('postgres filled by data')

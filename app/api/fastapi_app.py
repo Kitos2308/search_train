@@ -4,7 +4,6 @@ import uvloop
 from starlette.staticfiles import StaticFiles
 from app.settings import settings
 from fastapi import FastAPI
-from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette_prometheus import metrics
 from .searching.views import router as searching_router
 from app.main_app import Application
@@ -41,7 +40,6 @@ class FastAPIApplication:
                 debug=settings.DEBUG,
                 default_integrations=True,
             )
-            self.app.add_middleware(SentryAsgiMiddleware)
 
 
 def get_app() -> FastAPI:
@@ -49,5 +47,3 @@ def get_app() -> FastAPI:
 
 
 app = get_app()
-
-

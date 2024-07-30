@@ -20,6 +20,5 @@ async def search_query(
         searching_service: SearchingService = Depends(get_searching_service),
         value: str = Form()):
 
-    print(value)
     result = await searching_service.get_most_relevant_result(value)
     return templates.TemplateResponse("searching.html", {"request": request, 'articles': result.hits})
