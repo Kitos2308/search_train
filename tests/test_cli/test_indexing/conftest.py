@@ -12,17 +12,8 @@ class CursorMock:
     def __iter__(self):
         return iter(self.rows)
 
-    @property
     def fetchall(self):
-        return param
+        return self.mock_param()
 
-def param():
-    return {'suka':'suka'}
-
-class RowMock:
-    def __init__(self, result: dict[str, Any]):
-        self.result = result
-
-    @property
-    def fetchall(self):
-        return self.result.items()
+    def mock_param(self):
+        return self.rows

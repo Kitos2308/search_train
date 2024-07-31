@@ -7,4 +7,4 @@ async def get_source_data() -> list[SearchableEntity]:
     async with Database.session() as session:
         result = await session.execute(source_first_example)
         source_data = result.fetchall()
-        return [TextOne.from_orm(data) for data in source_data]
+        return [TextOne.model_validate(data) for data in source_data]
