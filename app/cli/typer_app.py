@@ -1,8 +1,11 @@
 import asyncio
+import logging
 from typing import Any
 
 import sentry_sdk
 from typer import Context, Typer
+
+from app.infrastructure.cutom_logging import CustomFormatter
 from app.settings import settings
 
 from app.cli.indexing.commands import app as cli_app
@@ -26,6 +29,8 @@ class CLIApplication:
 
         self.add_sentry()
 
+        self.setup_logging()
+
         return self.app
 
     def startup(self, ctx: Context) -> None:
@@ -48,6 +53,25 @@ class CLIApplication:
                 debug=settings.DEBUG,
                 default_integrations=True,
             )
+
+    @staticmethod
+    def setup_logging() -> None:
+
+        if settings.ENVIRONMENT in ['local', 'test']:
+            level_logging = logging.DEBUG
+        else:
+            level_logging = logging.WARNING
+
+        logger = logging.getLogger("cli app")
+        logger.setLevel(logging.DEBUG)
+
+        ch = logging.StreamHandler()
+        ch.setLevel(level_logging)
+
+        ch.setFormatter(CustomFormatter())
+
+        logger.addHandler(ch)
+
 
 
 def get_app() -> Typer:

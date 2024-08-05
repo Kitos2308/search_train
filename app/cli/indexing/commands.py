@@ -1,4 +1,6 @@
 import asyncio
+import logging
+
 from typer import Typer
 from app.core.indexing.index_repository import IndexingRepository
 from app.infrastructure.database import Database
@@ -18,6 +20,9 @@ _search_connection = AsyncElasticsearch(
 app = Typer(name="indexing")
 
 
+logger = logging.getLogger("cli app")
+
+
 async def _is_index_active(index_name: str) -> bool:
     return await _search_connection.indices.exists_alias(
         name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
@@ -32,6 +37,7 @@ async def get_active_write_index_name() -> str:
 
 
 async def _start_full_reindex():
+    logger.info('start reindex')
     index_manager = IndexManager(elasticsearch_connection=_search_connection)
     async with determine_writing_index_name(
             index_manager, is_mapping_changed=False

@@ -1,4 +1,6 @@
 import asyncio
+import logging
+
 import sentry_sdk
 import uvloop
 from starlette.staticfiles import StaticFiles
@@ -7,6 +9,7 @@ from fastapi import FastAPI
 from starlette_prometheus import metrics
 from .searching.views import router as searching_router
 from app.main_app import Application
+from ..infrastructure.cutom_logging import CustomFormatter
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
@@ -30,6 +33,8 @@ class FastAPIApplication:
 
         self.add_middlewares()
 
+        self.setup_logging()
+
         return self.app
 
     def add_middlewares(self) -> None:
@@ -40,6 +45,24 @@ class FastAPIApplication:
                 debug=settings.DEBUG,
                 default_integrations=True,
             )
+
+    @staticmethod
+    def setup_logging() -> None:
+
+        if settings.ENVIRONMENT in ['local', 'test']:
+            level_logging = logging.DEBUG
+        else:
+            level_logging = logging.WARNING
+
+        logger = logging.getLogger("api application")
+        logger.setLevel(logging.DEBUG)
+
+        ch = logging.StreamHandler()
+        ch.setLevel(level_logging)
+
+        ch.setFormatter(CustomFormatter())
+
+        logger.addHandler(ch)
 
 
 def get_app() -> FastAPI:

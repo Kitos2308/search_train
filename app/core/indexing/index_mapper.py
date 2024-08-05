@@ -1,3 +1,5 @@
+import logging
+
 from app.settings import settings
 from elasticsearch import AsyncElasticsearch
 from elasticsearch_dsl import (
@@ -7,7 +9,6 @@ from elasticsearch_dsl import (
     Text,
     analyzer,
 )
-from loguru import logger
 
 from elasticsearch_dsl import AsyncDocument
 
@@ -18,6 +19,7 @@ GARBAGE_TOKENS = [
     "скачать бесплатно",
 ]
 
+logger = logging.getLogger("cli app")
 
 class IndexDocument(AsyncDocument):
     primary_field = Text(
