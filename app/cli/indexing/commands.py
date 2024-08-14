@@ -23,19 +23,6 @@ app = Typer(name="indexing")
 logger = logging.getLogger("cli app")
 
 
-async def _is_index_active(index_name: str) -> bool:
-    return await _search_connection.indices.exists_alias(
-        name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
-    )
-
-
-async def get_active_write_index_name() -> str:
-    is_alpha_active = await _is_index_active(settings.SEARCH_INDEX_NAME_ALPHA)
-    if is_alpha_active:
-        _active_index_cache = settings.SEARCH_INDEX_NAME_ALPHA
-        return settings.SEARCH_INDEX_NAME_ALPHA
-
-
 async def _start_full_reindex():
     logger.info('start reindex')
     index_manager = IndexManager(elasticsearch_connection=_search_connection)

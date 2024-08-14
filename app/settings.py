@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     SEARCH_INDEX_NAME_BETA: str = Field(default='')
     ACTIVE_SEARCH_INDEX_ALIAS: str = Field(default='')
 
+    SENTRY_ENVIRONMENT: str = Field('SENTRY_ENVIRONMENT', min_length=1)
+
     ELASTICSEARCH_HOST: str = Field(default='', min_length=3)
 
     model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding='utf-8', extra='ignore')
