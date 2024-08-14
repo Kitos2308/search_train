@@ -1,7 +1,7 @@
+from datetime import datetime
 from typing import Union
 
 from pydantic import BaseModel, ConfigDict
-from datetime import datetime
 
 
 class TextOne(BaseModel):
@@ -11,6 +11,9 @@ class TextOne(BaseModel):
     img: str
     entity_date: datetime
 
-    model_config = ConfigDict(from_attributes=True,)
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
+
 
 SearchableEntity = Union[TextOne,]

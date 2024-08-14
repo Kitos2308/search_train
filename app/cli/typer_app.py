@@ -5,16 +5,15 @@ from typing import Any
 import sentry_sdk
 from typer import Context, Typer
 
-from app.infrastructure.cutom_logging import CustomFormatter
-from app.settings import settings
-
 from app.cli.indexing.commands import app as cli_app
+from app.infrastructure.cutom_logging import CustomFormatter
 from app.infrastructure.database import Database
 from app.main_app import Application
+from app.settings import settings
 
 
 class CLIApplication:
-    def __init__(self):
+    def __init__(self) -> None:
         self._db_connection = Database.create_engine(settings)
 
     def setup(self) -> Typer:
@@ -56,11 +55,7 @@ class CLIApplication:
 
     @staticmethod
     def setup_logging() -> None:
-
-        if settings.ENVIRONMENT in ['local', 'test']:
-            level_logging = logging.DEBUG
-        else:
-            level_logging = logging.WARNING
+        level_logging = logging.DEBUG if settings.ENVIRONMENT in ["local", "test"] else logging.WARNING
 
         logger = logging.getLogger("cli app")
         logger.setLevel(logging.DEBUG)
@@ -71,7 +66,6 @@ class CLIApplication:
         ch.setFormatter(CustomFormatter())
 
         logger.addHandler(ch)
-
 
 
 def get_app() -> Typer:

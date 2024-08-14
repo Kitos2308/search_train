@@ -2,8 +2,8 @@ from elasticsearch import AsyncElasticsearch
 from fastapi import Depends
 from starlette.requests import Request
 
-from app.core.searching.service import SearchingService
 from app.core.searching.repository import SearchingRepository
+from app.core.searching.service import SearchingService
 
 
 def get_search_connection(request: Request) -> AsyncElasticsearch:
@@ -11,9 +11,7 @@ def get_search_connection(request: Request) -> AsyncElasticsearch:
 
 
 def get_searching_repository(
-    search_connection: AsyncElasticsearch = Depends(
-        get_search_connection, use_cache=True
-    )
+    search_connection: AsyncElasticsearch = Depends(get_search_connection, use_cache=True),
 ) -> SearchingRepository:
     return SearchingRepository(using=search_connection)
 

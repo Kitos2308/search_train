@@ -1,10 +1,11 @@
 from elasticsearch import AsyncElasticsearch
-from app.settings import settings
+
 from app.core.indexing.index_manager import (
     IndexManager,
     determine_writing_index_name,
 )
 from app.core.indexing.index_mapper import IndexDocument
+from app.settings import settings
 
 
 class Application:
@@ -22,9 +23,7 @@ class Application:
         connection = AsyncElasticsearch(hosts=[settings.ELASTICSEARCH_HOST], maxsize=1)
         index_manager = IndexManager(connection)
 
-        async with determine_writing_index_name(
-            index_manager, is_mapping_changed=False
-        ) as writing_index:
+        async with determine_writing_index_name(index_manager, is_mapping_changed=False) as writing_index:
             await IndexDocument.initialize(target_index=writing_index, using=connection)
 
         await connection.close()

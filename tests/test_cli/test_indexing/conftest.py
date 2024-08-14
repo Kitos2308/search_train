@@ -1,8 +1,7 @@
-from typing import Any
 
 
 class CursorMock:
-    def __init__(self, rows):
+    def __init__(self, rows: list) -> None:
         self.rows = rows
         self.rowcount = len(rows)
 

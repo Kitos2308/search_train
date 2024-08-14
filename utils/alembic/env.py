@@ -1,11 +1,12 @@
+import sys
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool, text
+
 import sqlalchemy
 from alembic import context
-from app.settings import settings
+from sqlalchemy import engine_from_config, pool, text
+
 from app.core.models import Base
-import app.core.models as models
-import sys
+from app.settings import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -13,13 +14,7 @@ config = context.config
 
 config.set_main_option(
     "sqlalchemy.url",
-    "postgresql://%s:%s@%s:%s/%s" % (
-        settings.DB_USER,
-        settings.DB_PASS,
-        settings.DB_HOST,
-        settings.DB_PORT,
-        settings.DB_NAME
-    )
+    f"postgresql://{settings.DB_USER}:{settings.DB_PASS}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}",
 )
 
 # Interpret the config file for Python logging.
@@ -39,7 +34,7 @@ target_metadata.schema = settings.DB_SCHEMA
 # ... etc.
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -66,7 +61,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-def run_migrations_online():
+def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
@@ -81,7 +76,7 @@ def run_migrations_online():
 
     db_schema = settings.DB_SCHEMA
     with connectable.connect() as connection:
-        if settings.ENVIRONMENT == 'test':
+        if settings.ENVIRONMENT == "test":
             # В тестовом окружении создаем схему автоматически
             connection.execute(sqlalchemy.schema.CreateSchema(db_schema, if_not_exists=True))
 
@@ -97,14 +92,12 @@ def run_migrations_online():
         with context.begin_transaction():
             context.run_migrations()
 
-    """       
+    """
     Для локального окружения, если хочется запускать тесты в отдельной схеме БД
     то нужно в .env
     TEST_DB_SCHEMA=<test_schema_name>
     """
-    if '--autogenerate' not in sys.argv and settings.TEST_DB_SCHEMA:
-        print('')
-        print(f'TEST_DB_SCHEMA is {settings.TEST_DB_SCHEMA}')
+    if "--autogenerate" not in sys.argv and settings.TEST_DB_SCHEMA:
         test_db_schema = settings.TEST_DB_SCHEMA
         with connectable.connect() as connection:
             connection.execute(text(f'SET SEARCH_PATH TO "{test_db_schema}"'))

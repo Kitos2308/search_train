@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import SettingsConfigDict, BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -21,20 +21,20 @@ class Settings(BaseSettings):
     DB_SESSION_AUTOFLUSH: bool = Field(default=False)
 
     # Название базы данных для запуска локальных тестов (pytest). Если задано, то DB_SCHEMA будет заменено на это значение в conftest.py
-    TEST_DB_SCHEMA: str = Field(default='')
+    TEST_DB_SCHEMA: str = Field(default="")
 
-    SENTRY_DSN: str = Field(default='')
+    SENTRY_DSN: str = Field(default="")
     DEBUG: bool = Field(default=True)
 
-    SEARCH_INDEX_NAME_ALPHA: str = Field(default='')
-    SEARCH_INDEX_NAME_BETA: str = Field(default='')
-    ACTIVE_SEARCH_INDEX_ALIAS: str = Field(default='')
+    SEARCH_INDEX_NAME_ALPHA: str = Field(default="")
+    SEARCH_INDEX_NAME_BETA: str = Field(default="")
+    ACTIVE_SEARCH_INDEX_ALIAS: str = Field(default="")
 
-    SENTRY_ENVIRONMENT: str = Field('SENTRY_ENVIRONMENT', min_length=1)
+    SENTRY_ENVIRONMENT: str = Field("SENTRY_ENVIRONMENT", min_length=1)
 
-    ELASTICSEARCH_HOST: str = Field(default='', min_length=3)
+    ELASTICSEARCH_HOST: str = Field(default="", min_length=3)
 
-    model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding='utf-8', extra='ignore')
+    model_config = SettingsConfigDict(env_file=("../.env", ".env"), env_file_encoding="utf-8", extra="ignore")
 
 
 settings = Settings()

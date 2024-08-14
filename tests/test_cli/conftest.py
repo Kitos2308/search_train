@@ -9,8 +9,5 @@ from app.infrastructure.database import Database
 
 
 @pytest.fixture()
-def cli_app(
-    search_connection: Elasticsearch, db_connection: Database
-) -> Iterator[Typer]:
-    app = get_app()
-    yield app
+def cli_app(search_connection: Elasticsearch, db_connection: Database) -> Iterator[Typer]:
+    return get_app()

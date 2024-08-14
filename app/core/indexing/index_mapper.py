@@ -1,8 +1,8 @@
 import logging
 
-from app.settings import settings
 from elasticsearch import AsyncElasticsearch
 from elasticsearch_dsl import (
+    AsyncDocument,
     Date,
     Keyword,
     MetaField,
@@ -10,9 +10,8 @@ from elasticsearch_dsl import (
     analyzer,
 )
 
-from elasticsearch_dsl import AsyncDocument
-
 from app.numerals import POPULAR_NUMERALS
+from app.settings import settings
 
 GARBAGE_TOKENS = [
     "с иллюстрациями",
@@ -20,6 +19,7 @@ GARBAGE_TOKENS = [
 ]
 
 logger = logging.getLogger("cli app")
+
 
 class IndexDocument(AsyncDocument):
     primary_field = Text(
@@ -92,11 +92,8 @@ class IndexDocument(AsyncDocument):
     type = Keyword()
 
     @classmethod
-    async def initialize(
-            cls, target_index: str, using: AsyncElasticsearch = None
-    ) -> None:
-        """
-        Create the index and populate the mappings if the index does not exist.
+    async def initialize(cls, target_index: str, using: AsyncElasticsearch = None) -> None:
+        """Create the index and populate the mappings if the index does not exist.
 
         Same as Document.init, but if the index already exists, the method skips the mapping update
         """
@@ -109,9 +106,7 @@ class IndexDocument(AsyncDocument):
             logger.info("index already exists, skip the creation")
 
     class Index:
-        name = (
-            settings.ACTIVE_SEARCH_INDEX_ALIAS
-        )  # put alias here, so we read only from it
+        name = settings.ACTIVE_SEARCH_INDEX_ALIAS  # put alias here, so we read only from it
         dynamic = MetaField("strict")
         settings = {
             "index": {
@@ -156,10 +151,7 @@ class IndexDocument(AsyncDocument):
                         # коверкать слова: например, вместо "электронная" придется написать "електронная".
                         "garbage_tokens_strip": {
                             "type": "mapping",
-                            "mappings": [
-                                f"{garbage_token} => "
-                                for garbage_token in GARBAGE_TOKENS
-                            ],
+                            "mappings": [f"{garbage_token} => " for garbage_token in GARBAGE_TOKENS],
                         },
                         # При применении, similar_sounds будут влиять на всё: стемминг,
                         # стоп-слова, другие char_filters, следующие после них
@@ -211,6 +203,6 @@ class IndexDocument(AsyncDocument):
                         },
                         "russian_stop": {"type": "stop", "stopwords": "_russian_"},
                     },
-                }
-            }
+                },
+            },
         }

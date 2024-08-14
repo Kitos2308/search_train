@@ -1,14 +1,16 @@
 import asyncio
 import contextlib
 from typing import AsyncIterator
+
 from dynaconf import settings
 from elasticsearch import AsyncElasticsearch
 from loguru import logger
+
 from app.settings import settings
 
 
 class IndexManager:
-    def __init__(self, elasticsearch_connection: AsyncElasticsearch):
+    def __init__(self, elasticsearch_connection: AsyncElasticsearch) -> None:
         self.elasticsearch_connection = elasticsearch_connection
         self._active_index_cache: str | None = None
         self._inactive_index_cache: str | None = None
@@ -31,9 +33,7 @@ class IndexManager:
         return settings.SEARCH_INDEX_NAME_ALPHA
 
     async def _is_index_active(self, index_name: str) -> bool:
-        return await self.elasticsearch_connection.indices.exists_alias(
-            name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
-        )
+        return await self.elasticsearch_connection.indices.exists_alias(name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name)
 
     async def does_active_index_exist(self) -> bool:
         return any(
@@ -41,33 +41,22 @@ class IndexManager:
                 *[
                     self._is_index_active(settings.SEARCH_INDEX_NAME_ALPHA),
                     self._is_index_active(settings.SEARCH_INDEX_NAME_BETA),
-                ]
-            )
+                ],
+            ),
         )
 
     async def activate_index(self, index_name: str) -> None:
-        this_index_active = await self.elasticsearch_connection.indices.exists_alias(
-            name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name
-        )
+        this_index_active = await self.elasticsearch_connection.indices.exists_alias(name=settings.ACTIVE_SEARCH_INDEX_ALIAS, index=index_name)
         if this_index_active:
-            logger.info(
-                f"index {index_name} already tied to alias {settings.ACTIVE_SEARCH_INDEX_ALIAS}, do nothing"
-            )
-            return None
+            logger.info(f"index {index_name} already tied to alias {settings.ACTIVE_SEARCH_INDEX_ALIAS}, do nothing")
+            return
 
-        some_index_active = await self.elasticsearch_connection.indices.exists_alias(
-            name=settings.ACTIVE_SEARCH_INDEX_ALIAS
-        )
+        some_index_active = await self.elasticsearch_connection.indices.exists_alias(name=settings.ACTIVE_SEARCH_INDEX_ALIAS)
         if some_index_active:
-            logger.warning(
-                f"alias {settings.ACTIVE_SEARCH_INDEX_ALIAS} tied to a different index, "
-                f"human intervention required"
-            )
-            return None
+            logger.warning(f"alias {settings.ACTIVE_SEARCH_INDEX_ALIAS} tied to a different index, human intervention required")
+            return
 
-        await self.elasticsearch_connection.indices.put_alias(
-            index=index_name, name=settings.ACTIVE_SEARCH_INDEX_ALIAS
-        )
+        await self.elasticsearch_connection.indices.put_alias(index=index_name, name=settings.ACTIVE_SEARCH_INDEX_ALIAS)
 
     async def get_inactive_write_index_name(self, check_exists: bool = False) -> str:
         if self._inactive_index_cache:
@@ -80,14 +69,12 @@ class IndexManager:
             self._inactive_index_cache = settings.SEARCH_INDEX_NAME_ALPHA
 
         if self._inactive_index_cache is None:
-            raise AssertionError(
-                "either SEARCH_INDEX_NAME_ALPHA or SEARCH_INDEX_NAME_BETA is not set"
-            )
+            msg = "either SEARCH_INDEX_NAME_ALPHA or SEARCH_INDEX_NAME_BETA is not set"
+            raise AssertionError(msg)
 
-        if check_exists:
-            if await self._is_existing_index(self._inactive_index_cache):
-                # log that the invariant is broken, then proceed and hope for the best
-                logger.error(f"{self._inactive_index_cache} already exists")
+        if check_exists and await self._is_existing_index(self._inactive_index_cache):
+            # log that the invariant is broken, then proceed and hope for the best
+            logger.error(f"{self._inactive_index_cache} already exists")
 
         return self._inactive_index_cache
 
@@ -122,16 +109,16 @@ class IndexManager:
                         "remove": {
                             "index": from_index,
                             "alias": settings.ACTIVE_SEARCH_INDEX_ALIAS,
-                        }
+                        },
                     },
                     {
                         "add": {
                             "index": to_index,
                             "alias": settings.ACTIVE_SEARCH_INDEX_ALIAS,
-                        }
+                        },
                     },
-                ]
-            }
+                ],
+            },
         )
 
     def _reset_cache(self) -> None:
@@ -150,9 +137,7 @@ class IndexManager:
 
 
 @contextlib.asynccontextmanager
-async def determine_writing_index_name(
-    index_manager: IndexManager, is_mapping_changed: bool
-) -> AsyncIterator[str]:
+async def determine_writing_index_name(index_manager: IndexManager, is_mapping_changed: bool) -> AsyncIterator[str]:
     try:
         if is_mapping_changed:
             index_name = await index_manager.get_inactive_write_index_name()

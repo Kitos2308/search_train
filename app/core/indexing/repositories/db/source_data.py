@@ -1,6 +1,6 @@
 from app.infrastructure.database import Database
+from app.infrastructure.schemas.source_example_one import SearchableEntity, TextOne
 from .sql_source_query import source_first_example
-from app.infrastructure.schemas.source_example_one import TextOne, SearchableEntity
 
 
 async def get_source_data() -> list[SearchableEntity]:
